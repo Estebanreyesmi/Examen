@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:examen_final/routes/app_routes.dart';
+import 'package:examen_final/services/auth_service.dart';
+import 'package:examen_final/services/product_service.dart';
+import 'package:examen_final/theme/my_theme.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MainApp());
+void main() => runApp(AppState());
+
+class AppState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthService()),
+        ChangeNotifierProvider(create: (_) => ProductService()),
+      ],
+      child: const MainApp(),
+    );
+  }
 }
 
 class MainApp extends StatelessWidget {
@@ -9,12 +25,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Material App',
+      initialRoute: AppRoutes.initialRoute,
+      routes: AppRoutes.routes,
+      onGenerateRoute: AppRoutes.onGenerateRoute,
+      theme: MyTheme.myTheme,
     );
   }
 }
