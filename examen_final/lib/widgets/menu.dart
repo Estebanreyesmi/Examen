@@ -40,8 +40,7 @@ class CustomDrawer extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => ListCategoryScreen()),
+                    MaterialPageRoute(builder: (context) => CategoryScreen()),
                   );
                 },
               ),
