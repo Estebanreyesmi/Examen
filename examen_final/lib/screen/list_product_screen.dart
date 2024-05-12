@@ -3,8 +3,6 @@ import 'package:examen_final/models/productos.dart';
 import 'package:examen_final/services/product_service.dart';
 import 'package:examen_final/widgets/product_card.dart';
 import 'package:provider/provider.dart';
-import 'package:examen_final/services/services.dart';
-import 'package:examen_final/widgets/widgets.dart';
 import 'package:examen_final/screen/screen.dart';
 
 class ListProductScreen extends StatelessWidget {

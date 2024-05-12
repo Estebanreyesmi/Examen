@@ -1,3 +1,4 @@
+import 'package:examen_final/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:examen_final/screen/screen.dart';
 
@@ -8,6 +9,7 @@ class AppRoutes {
     'list': (BuildContext context) => const ListProductScreen(),
     'edit': (BuildContext context) => const EditProductScreen(),
     'add_user': (BuildContext context) => const RegisterUserScreen(),
+    'home': (BuildContext context) => const HomeScreen(),
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {

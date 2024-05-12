@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MyTheme {
-  static const Color primary = Color.fromRGBO(57, 8, 233, 1);
+  static const Color primary = Color.fromRGBO(11, 155, 75, 1);
 
   static final ThemeData myTheme = ThemeData(
       primaryColor: primary,
