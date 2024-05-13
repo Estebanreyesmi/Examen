@@ -1,114 +1,61 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:examen_final/models/categoria.dart';
+import 'package:http/http.dart' as http;
 
-class CategoryService extends ChangeNotifier {
-  final String _baseUrl = '143.198.118.203:8050';
-  final String _user = 'test';
-  final String _pass = 'test2023';
+class CategoryService {
+  final String _baseUrl = "143.198.118.203:8050";
+  final String _user = "test";
+  final String _pass = "test2023";
 
-  List<Listado> categories = [];
-  Listado? selectedCategory;
-  bool isLoading = true;
-  bool isEditCreate = true;
-
-  CategoryService() {
-    loadCategories();
-  }
-
-  Future loadCategories() async {
-    isLoading = true;
-    notifyListeners();
-
-    final url = Uri.http(
-      _baseUrl,
-      'ejemplos/category_list_rest/',
-    );
-    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$_user:$_pass'));
-
-    final response = await http.get(url, headers: {'authorization': basicAuth});
-    final categoriesMap = Category.fromJson(response.body);
-    print(response.body);
-    categories = categoriesMap.listado;
-    isLoading = false;
-    notifyListeners();
-  }
-
-  Future editOrCreateCategory(Listado category) async {
-    isEditCreate = true;
-    notifyListeners();
-
-    if (category.categoryId == 0) {
-      await createCategory(category);
+  Future<List<Category>> getCategoryList() async {
+    final response = await http.get(
+        Uri.http(_baseUrl, 'ejemplos/category_list_rest/'),
+        headers: _createHeaders());
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = json.decode(response.body);
+      return responseData.map((json) => Category.fromJson(json)).toList();
     } else {
-      await updateCategory(category);
+      throw Exception('Failed to load categories');
     }
-
-    isEditCreate = false;
-    notifyListeners();
   }
 
-  Future<String> updateCategory(Listado category) async {
-    final url = Uri.http(
-      _baseUrl,
-      'ejemplos/category_edit_rest/',
+  Future<void> addCategory(Category category) async {
+    final response = await http.post(
+      Uri.http(_baseUrl, 'ejemplos/category_add_rest/'),
+      headers: _createHeaders(),
+      body: json.encode(category.toJson()),
     );
-    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$_user:$_pass'));
-
-    final response = await http.post(url, body: category.toJson(), headers: {
-      'authorization': basicAuth,
-      'Content-Type': 'application/json; charset=UTF-8',
-    });
-
-    final decodeResp = response.body;
-    print(decodeResp);
-
-    final index = categories
-        .indexWhere((element) => element.categoryId == category.categoryId);
-    categories[index] = category;
-
-    return '';
+    if (response.statusCode != 200) {
+      throw Exception('Failed to add category');
+    }
   }
 
-  Future createCategory(Listado category) async {
-    final url = Uri.http(
-      _baseUrl,
-      'ejemplos/category_add_rest/',
+  Future<void> editCategory(Category category) async {
+    final response = await http.post(
+      Uri.http(_baseUrl, 'ejemplos/category_edit_rest/'),
+      headers: _createHeaders(),
+      body: json.encode(category.toJson()),
     );
-    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$_user:$_pass'));
-
-    final response = await http.post(url, body: category.toJson(), headers: {
-      'authorization': basicAuth,
-      'Content-type': 'application/json; charset=UTF-8',
-    });
-
-    final decodeResp = response.body;
-    print(decodeResp);
-
-    categories.add(category);
-    return '';
+    if (response.statusCode != 200) {
+      throw Exception('Failed to edit category');
+    }
   }
 
-  Future deleteCategory(Listado category, BuildContext context) async {
-    final url = Uri.http(
-      _baseUrl,
-      'ejemplos/category_del_rest/',
+  Future<void> deleteCategory(int categoryId) async {
+    final response = await http.post(
+      Uri.http(_baseUrl, 'ejemplos/category_del_rest/'),
+      headers: _createHeaders(),
+      body: json.encode({'category_id': categoryId}),
     );
-    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$_user:$_pass'));
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete category');
+    }
+  }
 
-    final response = await http.post(url, body: category.toJson(), headers: {
-      'authorization': basicAuth,
-      'Content-type': 'application/json; charset=UTF-8',
-    });
-
-    final decodeResp = response.body;
-    print(decodeResp);
-
-    categories.clear(); // Borra todo el listado
-    loadCategories();
-
-    Navigator.of(context).pushNamed('list');
-    return '';
+  Map<String, String> _createHeaders() {
+    return {
+      'Authorization': 'Basic ' + base64Encode(utf8.encode('$_user:$_pass')),
+      'Content-Type': 'application/json',
+    };
   }
 }

@@ -1,5 +1,3 @@
-import 'package:examen_final/models/categoria.dart';
-import 'package:examen_final/services/category_service.dart';
 import 'package:flutter/material.dart';
 
 class CategoryFormScreen extends StatefulWidget {
@@ -15,7 +13,7 @@ class _CategoryFormScreenState extends State<CategoryFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Category Form'),
+        title: Text('agregarCategory'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -24,18 +22,14 @@ class _CategoryFormScreenState extends State<CategoryFormScreen> {
           children: [
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
-            ),
-            TextField(
-              controller: _stateController,
-              decoration: InputDecoration(labelText: 'State'),
+              decoration: InputDecoration(labelText: 'Category Name'),
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 _submitForm();
               },
-              child: Text('Submit'),
+              child: Text('Agregar Categoria'),
             ),
           ],
         ),
@@ -44,81 +38,38 @@ class _CategoryFormScreenState extends State<CategoryFormScreen> {
   }
 
   void _submitForm() {
-    // Obtener los valores del formulario
     final String name = _nameController.text;
     final String state = _stateController.text;
 
-    if (name.isEmpty || state.isEmpty) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text('Por favor, completa todos los campos.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
+    if (name.isNotEmpty && state.isNotEmpty) {
+      _showSuccessMessage();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please fill all fields.'),
+          backgroundColor: Colors.red,
+        ),
       );
-      return;
     }
+  }
 
-    // Crear la instancia de la categoría con los datos del formulario
-    final Category newCategory = Category(
-      id: 0, // Esto puede ser cualquier valor ya que el servidor generará el ID
-      name: name,
-      state: state,
+  void _showSuccessMessage() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Success'),
+          content: Text('Category added successfully.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
-
-    CategoryService categoryService = CategoryService(
-      baseUrl: _baseUrl,
-      user: _user,
-      pass: _pass,
-    );
-    categoryService.addCategory(newCategory).then((_) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Éxito'),
-            content: Text('La categoría se ha agregado correctamente.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }).catchError((error) {
-      // Manejar errores
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text(
-                'Hubo un error al agregar la categoría. Por favor, inténtalo de nuevo más tarde.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    });
   }
 }

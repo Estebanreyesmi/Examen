@@ -1,56 +1,23 @@
-import 'dart:convert';
-
 class Category {
-  Category({
-    required this.listado,
-  });
+  final int id;
+  final String name;
+  final String state;
 
-  List<Listado> listado;
+  Category({required this.id, required this.name, required this.state});
 
-  factory Category.fromJson(String str) => Category.fromMap(json.decode(str));
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
+      id: json['category_id'],
+      name: json['category_name'],
+      state: json['category_state'],
+    );
+  }
 
-  String toJson() => json.encode(toMap());
-
-  factory Category.fromMap(Map<String, dynamic> json) => Category(
-        listado: json["Listado"] != null
-            ? List<Listado>.from(json["Listado"].map((x) => Listado.fromMap(x)))
-            : [],
-      );
-
-  Map<String, dynamic> toMap() => {
-        "Listado": List<dynamic>.from(listado.map((x) => x.toMap())),
-      };
-}
-
-class Listado {
-  Listado({
-    required this.categoryId,
-    required this.categoryName,
-    required this.categoryState,
-  });
-
-  int categoryId;
-  String categoryName;
-  String categoryState;
-
-  factory Listado.fromJson(String str) => Listado.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory Listado.fromMap(Map<String, dynamic> json) => Listado(
-        categoryId: json["category_id"],
-        categoryName: json["category_name"],
-        categoryState: json["category_state"],
-      );
-
-  Map<String, dynamic> toMap() => {
-        "category_id": categoryId,
-        "category_name": categoryName,
-        "category_State": categoryState,
-      };
-
-  Listado copy() => Listado(
-      categoryId: categoryId,
-      categoryName: categoryName,
-      categoryState: categoryState);
+  Map<String, dynamic> toJson() {
+    return {
+      'category_id': id,
+      'category_name': name,
+      'category_state': state,
+    };
+  }
 }
