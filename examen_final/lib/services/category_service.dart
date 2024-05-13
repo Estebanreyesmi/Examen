@@ -1,61 +1,104 @@
+import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:examen_final/models/categoria.dart';
 import 'package:http/http.dart' as http;
 
-class CategoryService {
-  final String _baseUrl = "143.198.118.203:8050";
-  final String _user = "test";
-  final String _pass = "test2023";
+class CategoryService extends ChangeNotifier {
+  final String _baseUrl = '143.198.118.203:8050';
+  final String _user = 'test';
+  final String _pass = 'test2023';
 
-  Future<List<Category>> getCategoryList() async {
-    final response = await http.get(
-        Uri.http(_baseUrl, 'ejemplos/category_list_rest/'),
-        headers: _createHeaders());
-    if (response.statusCode == 200) {
-      final List<dynamic> responseData = json.decode(response.body);
-      return responseData.map((json) => Category.fromJson(json)).toList();
-    } else {
-      throw Exception('Failed to load categories');
-    }
+  List<Listado> categories = [];
+  Listado? selectedCategory;
+  bool isLoading = true;
+  bool isEditCreate = true;
+
+  CategoryService() {
+    loadCategories();
   }
 
-  Future<void> addCategory(Category category) async {
-    final response = await http.post(
-      Uri.http(_baseUrl, 'ejemplos/category_add_rest/'),
-      headers: _createHeaders(),
-      body: json.encode(category.toJson()),
+  Future loadCategories() async {
+    isLoading = true;
+    notifyListeners();
+    final url = Uri.http(
+      _baseUrl,
+      'ejemplos/category_list_rest/',
     );
-    if (response.statusCode != 200) {
-      throw Exception('Failed to add category');
-    }
+    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$_user:$_pass'));
+    final response = await http.get(url, headers: {'authorization': basicAuth});
+    final categoriesMap = Categoria.fromJson(response.body);
+    print(response.body);
+    categories = categoriesMap.listado;
+    isLoading = false;
+    notifyListeners();
   }
 
-  Future<void> editCategory(Category category) async {
-    final response = await http.post(
-      Uri.http(_baseUrl, 'ejemplos/category_edit_rest/'),
-      headers: _createHeaders(),
-      body: json.encode(category.toJson()),
+  Future createCategory(Listado category) async {
+    final url = Uri.http(
+      _baseUrl,
+      'ejemplos/category_add_rest/',
     );
-    if (response.statusCode != 200) {
-      throw Exception('Failed to edit category');
-    }
+    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$_user:$_pass'));
+    final response = await http.post(url, body: category.toJson(), headers: {
+      'authorization': basicAuth,
+      'Content-type': 'application/json; charset=UTF-8',
+    });
+    final decodeResp = response.body;
+    print(decodeResp);
+    categories.add(category);
   }
+}
 
-  Future<void> deleteCategory(int categoryId) async {
-    final response = await http.post(
-      Uri.http(_baseUrl, 'ejemplos/category_del_rest/'),
-      headers: _createHeaders(),
-      body: json.encode({'category_id': categoryId}),
-    );
-    if (response.statusCode != 200) {
-      throw Exception('Failed to delete category');
-    }
-  }
+class Categoria {
+  Categoria({
+    required this.listado,
+  });
 
-  Map<String, String> _createHeaders() {
-    return {
-      'Authorization': 'Basic ' + base64Encode(utf8.encode('$_user:$_pass')),
-      'Content-Type': 'application/json',
-    };
-  }
+  List<Listado> listado;
+
+  factory Categoria.fromJson(String str) => Categoria.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Categoria.fromMap(Map<String, dynamic> json) => Categoria(
+        listado:
+            List<Listado>.from(json["Listado"].map((x) => Listado.fromMap(x))),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "Listado": List<dynamic>.from(listado.map((x) => x.toMap())),
+      };
+}
+
+class Listado {
+  Listado({
+    required this.categoryId,
+    required this.categoryName,
+    required this.categoryState,
+  });
+
+  int categoryId;
+  String categoryName;
+  String categoryState;
+
+  factory Listado.fromJson(String str) => Listado.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Listado.fromMap(Map<String, dynamic> json) => Listado(
+        categoryId: json["category_id"],
+        categoryName: json["category_name"],
+        categoryState: json["category_state"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "category_id": categoryId,
+        "category_name": categoryName,
+        "category_state": categoryState,
+      };
+
+  Listado copy() => Listado(
+        categoryId: categoryId,
+        categoryName: categoryName,
+        categoryState: categoryState,
+      );
 }

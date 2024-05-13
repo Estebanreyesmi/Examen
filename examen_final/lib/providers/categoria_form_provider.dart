@@ -3,7 +3,7 @@ import 'package:examen_final/models/categoria.dart';
 
 class CategoryFormProvider extends ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  Category category;
+  Listado category;
 
   CategoryFormProvider(this.category);
 

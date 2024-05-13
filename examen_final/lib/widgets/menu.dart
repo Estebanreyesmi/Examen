@@ -1,3 +1,4 @@
+import 'package:examen_final/screen/add_category.dart';
 import 'package:flutter/material.dart';
 import 'package:examen_final/screen/screen.dart';
 
@@ -30,7 +31,7 @@ class CustomDrawer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ListProductScreen()),
+                        builder: (context) => AgregarCategoriaScreen()),
                   );
                 },
               ),
@@ -41,7 +42,7 @@ class CustomDrawer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CategoryFormScreen()),
+                        builder: (context) => ListaCategoriasScreen()),
                   );
                 },
               ),
