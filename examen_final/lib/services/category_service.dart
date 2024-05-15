@@ -40,6 +40,7 @@ class CategoriaService with ChangeNotifier {
     }
     isEditCreate = false;
     notifyListeners();
+    loadCategorias();
   }
 
   Future<String> updateCategoria(CategoriaItem categoria) async {
@@ -56,6 +57,7 @@ class CategoriaService with ChangeNotifier {
     final index = categorias
         .indexWhere((element) => element.categoryId == categoria.categoryId);
     categorias[index] = categoria;
+    loadCategorias();
 
     return '';
   }
@@ -70,6 +72,7 @@ class CategoriaService with ChangeNotifier {
     final decodeResp = response.body;
     print(decodeResp);
     this.categorias.add(categoria);
+    loadCategorias();
   }
 
   Future<void> deleteCategoria(
@@ -84,6 +87,5 @@ class CategoriaService with ChangeNotifier {
     print(decodeResp);
     this.categorias.clear();
     loadCategorias();
-    Navigator.of(context).pushNamed('cat');
   }
 }

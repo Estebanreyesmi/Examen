@@ -29,7 +29,7 @@ class _AgregarCategoriaScreenState extends State<AgregarCategoriaScreen> {
               decoration: InputDecoration(labelText: 'Nombre de la categoría'),
             ),
             SwitchListTile(
-              title: Text('Estado de la categoría'),
+              title: Text('Estado Activo, Inactivo'),
               value: _estado,
               onChanged: (value) {
                 setState(() {

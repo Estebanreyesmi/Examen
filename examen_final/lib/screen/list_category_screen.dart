@@ -22,7 +22,54 @@ class ListCategoriaScreen extends StatelessWidget {
           return ListTile(
             title: Text(categoria.categoryName),
             subtitle: Text(categoria.categoryState),
-            onTap: () {},
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    categoriaService.selectedCategoria = categoria;
+                    Navigator.pushNamed(context, 'editcat');
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    // Eliminar la categoría seleccionada
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Eliminar Categoría'),
+                        content: Text(
+                            '¿Estás seguro de que deseas eliminar esta categoría?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              // Cierra el cuadro de diálogo sin hacer nada
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Cancelar'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // Confirma la eliminación de la categoría
+                              categoriaService.deleteCategoria(
+                                  categoria, context);
+                              Navigator.of(context)
+                                  .pop(); // Cierra el cuadro de diálogo
+                            },
+                            child: Text('Eliminar'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            onTap: () {
+              // Realizar acciones adicionales al tocar el ListTile si es necesario
+            },
           );
         },
       ),
@@ -31,7 +78,7 @@ class ListCategoriaScreen extends StatelessWidget {
         onPressed: () {
           categoriaService.selectedCategoria =
               CategoriaItem(categoryId: 0, categoryName: '', categoryState: '');
-          Navigator.pushNamed(context, 'editcat');
+          Navigator.pushNamed(context, 'addcat');
         },
       ),
     );

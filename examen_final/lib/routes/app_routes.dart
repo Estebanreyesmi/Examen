@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:examen_final/screen/screen.dart';
 
 class AppRoutes {
-  static const initialRoute = 'login';
+  static const initialRoute = 'home';
   static Map<String, Widget Function(BuildContext)> routes = {
     'login': (BuildContext context) => const LoginScreen(),
     'list': (BuildContext context) => const ListProductScreen(),
@@ -12,7 +12,8 @@ class AppRoutes {
     'add_user': (BuildContext context) => const RegisterUserScreen(),
     'home': (BuildContext context) => const HomeScreen(),
     'cat': (BuildContext context) => const ListCategoriaScreen(),
-    'editcat': (BuildContext context) => AgregarCategoriaScreen(),
+    'addcat': (BuildContext context) => AgregarCategoriaScreen(),
+    'editcat': (BuildContext context) => const EditCategoriaScreen(),
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
