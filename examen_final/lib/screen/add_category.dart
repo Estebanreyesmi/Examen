@@ -10,7 +10,8 @@ class AgregarCategoriaScreen extends StatefulWidget {
 
 class _AgregarCategoriaScreenState extends State<AgregarCategoriaScreen> {
   final TextEditingController _nombreController = TextEditingController();
-  final TextEditingController _estadoController = TextEditingController();
+
+  bool _estado = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +28,14 @@ class _AgregarCategoriaScreenState extends State<AgregarCategoriaScreen> {
               controller: _nombreController,
               decoration: InputDecoration(labelText: 'Nombre de la categoría'),
             ),
-            TextField(
-              controller: _estadoController,
-              decoration: InputDecoration(labelText: 'Estado de la categoría'),
+            SwitchListTile(
+              title: Text('Estado de la categoría'),
+              value: _estado,
+              onChanged: (value) {
+                setState(() {
+                  _estado = value;
+                });
+              },
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -44,13 +50,12 @@ class _AgregarCategoriaScreenState extends State<AgregarCategoriaScreen> {
 
   void _agregarCategoria(BuildContext context) {
     final String nombre = _nombreController.text.trim();
-    final String estado = _estadoController.text.trim();
 
-    if (nombre.isNotEmpty && estado.isNotEmpty) {
+    if (nombre.isNotEmpty) {
       final CategoriaItem nuevaCategoria = CategoriaItem(
         categoryId: 0,
         categoryName: nombre,
-        categoryState: estado,
+        categoryState: _estado ? 'Activo' : 'Inactivo',
       );
 
       Provider.of<CategoriaService>(context, listen: false)
