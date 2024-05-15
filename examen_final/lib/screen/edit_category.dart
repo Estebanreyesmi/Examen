@@ -17,7 +17,7 @@ class _EditCategoriaScreenState extends State<EditCategoriaScreen> {
   @override
   void initState() {
     super.initState();
-    // Inicializa el controlador de texto y el estado con los valores de la categoría seleccionada
+    // Inicializa el controlador de texto y el estado con los valores de la categoría seleccionada mmm revisar
     final categoriaService =
         Provider.of<CategoriaService>(context, listen: false);
     final selectedCategoria = categoriaService.selectedCategoria;

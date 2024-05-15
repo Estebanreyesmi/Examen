@@ -1,4 +1,5 @@
 import 'package:examen_final/services/category_service.dart';
+import 'package:examen_final/services/proveedor_service.dart';
 import 'package:flutter/material.dart';
 import 'package:examen_final/routes/app_routes.dart';
 import 'package:examen_final/services/auth_service.dart';
@@ -16,6 +17,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => ProductService()),
         ChangeNotifierProvider(create: (_) => CategoriaService()),
+        ChangeNotifierProvider(create: (_) => ProveedorService()),
       ],
       child: const MainApp(),
     );

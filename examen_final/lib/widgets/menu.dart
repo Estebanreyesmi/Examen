@@ -1,4 +1,3 @@
-import 'package:examen_final/screen/add_category.dart';
 import 'package:flutter/material.dart';
 import 'package:examen_final/screen/screen.dart';
 
