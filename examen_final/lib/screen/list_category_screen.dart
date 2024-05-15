@@ -1,52 +1,38 @@
 import 'package:examen_final/models/categoria.dart';
+import 'package:examen_final/screen/loading_screen.dart';
 import 'package:examen_final/services/category_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CategoriaScreen extends StatelessWidget {
-  const CategoriaScreen({super.key});
+class ListCategoriaScreen extends StatelessWidget {
+  const ListCategoriaScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    final productService = Provider.of<CategoriaService>(context);
+    final categoriaService = Provider.of<CategoriaService>(context);
+    if (categoriaService.isLoading) return LoadingScreen();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Categorías'),
+        title: const Text('Listado de categorías'),
       ),
-      body: Consumer<CategoriaService>(
-        builder: (context, categoriaService, _) {
-          if (categoriaService.isLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return ListView.builder(
-              itemCount: categoriaService.categorias.length,
-              itemBuilder: (context, index) {
-                final categoria = categoriaService.categorias[index];
-                return _buildCategoriaItem(categoria);
-              },
-            );
-          }
+      body: ListView.builder(
+        itemCount: categoriaService.categorias.length,
+        itemBuilder: (BuildContext context, index) {
+          final categoria = categoriaService.categorias[index];
+          return ListTile(
+            title: Text(categoria.categoryName),
+            subtitle: Text(categoria.categoryState),
+            onTap: () {},
+          );
         },
       ),
-    );
-  }
-
-  Widget _buildCategoriaItem(CategoriaItem categoria) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'ID: ${categoria.categoryId}',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text('Nombre: ${categoria.categoryName}'),
-          Text('Estado: ${categoria.categoryState}'),
-          SizedBox(height: 8),
-          Divider(),
-        ],
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          categoriaService.selectedCategoria =
+              CategoriaItem(categoryId: 0, categoryName: '', categoryState: '');
+          Navigator.pushNamed(context, 'edit');
+        },
       ),
     );
   }

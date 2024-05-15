@@ -13,11 +13,11 @@ class Categoria {
 
   factory Categoria.fromMap(Map<String, dynamic> json) => Categoria(
         categoriaList: List<CategoriaItem>.from(
-            json["CategoriaList"].map((x) => CategoriaItem.fromMap(x))),
+            json["Listado Categorias"].map((x) => CategoriaItem.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
-        "CategoriaList":
+        "Listado Categorias":
             List<dynamic>.from(categoriaList.map((x) => x.toMap())),
       };
 }

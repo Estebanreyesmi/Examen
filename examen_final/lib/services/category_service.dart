@@ -17,13 +17,14 @@ class CategoriaService with ChangeNotifier {
     loadCategorias();
   }
 
-  Future<void> loadCategorias() async {
+  Future loadCategorias() async {
     isLoading = true;
     notifyListeners();
-    final url = Uri.http(_baseUrl, 'ejemplos/categoria_list_rest/');
+    final url = Uri.http(_baseUrl, 'ejemplos/category_list_rest/');
     String basicAuth = 'Basic ' + base64Encode(utf8.encode('$_user:$_pass'));
     final response = await http.get(url, headers: {'authorization': basicAuth});
     final categoriasMap = Categoria.fromJson(response.body);
+    print(response.body);
     categorias = categoriasMap.categoriaList;
     isLoading = false;
     notifyListeners();
@@ -42,7 +43,7 @@ class CategoriaService with ChangeNotifier {
   }
 
   Future<String> updateCategoria(CategoriaItem categoria) async {
-    final url = Uri.http(_baseUrl, 'ejemplos/categoria_edit_rest/');
+    final url = Uri.http(_baseUrl, 'ejemplos/category_edit_rest/');
     String basicAuth = 'Basic ' + base64Encode(utf8.encode('$_user:$_pass'));
     final response = await http.post(url, body: categoria.toJson(), headers: {
       'authorization': basicAuth,
@@ -51,7 +52,7 @@ class CategoriaService with ChangeNotifier {
     final decodeResp = response.body;
     print(decodeResp);
 
-    // Actualizamos la lista de categorías
+    // Actualizar la lista de categorías
     final index = categorias
         .indexWhere((element) => element.categoryId == categoria.categoryId);
     categorias[index] = categoria;
@@ -60,7 +61,7 @@ class CategoriaService with ChangeNotifier {
   }
 
   Future<void> createCategoria(CategoriaItem categoria) async {
-    final url = Uri.http(_baseUrl, 'ejemplos/categoria_add_rest/');
+    final url = Uri.http(_baseUrl, 'ejemplos/category_add_rest/');
     String basicAuth = 'Basic ' + base64Encode(utf8.encode('$_user:$_pass'));
     final response = await http.post(url, body: categoria.toJson(), headers: {
       'authorization': basicAuth,
@@ -73,7 +74,7 @@ class CategoriaService with ChangeNotifier {
 
   Future<void> deleteCategoria(
       CategoriaItem categoria, BuildContext context) async {
-    final url = Uri.http(_baseUrl, 'ejemplos/categoria_del_rest/');
+    final url = Uri.http(_baseUrl, 'ejemplos/category_del_rest/');
     String basicAuth = 'Basic ' + base64Encode(utf8.encode('$_user:$_pass'));
     final response = await http.post(url, body: categoria.toJson(), headers: {
       'authorization': basicAuth,
@@ -81,8 +82,8 @@ class CategoriaService with ChangeNotifier {
     });
     final decodeResp = response.body;
     print(decodeResp);
-    this.categorias.clear(); // Borra todo el listado
+    this.categorias.clear();
     loadCategorias();
-    Navigator.of(context).pushNamed('list');
+    Navigator.of(context).pushNamed('cat');
   }
 }

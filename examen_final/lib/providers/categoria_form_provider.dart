@@ -3,9 +3,9 @@ import 'package:examen_final/models/categoria.dart';
 
 class CategoryFormProvider extends ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  CategoriaItem categoriaList;
+  CategoriaItem category;
 
-  CategoryFormProvider(this.categoriaList);
+  CategoryFormProvider(this.category);
 
   bool isValidForm() {
     return formKey.currentState?.validate() ?? false;
