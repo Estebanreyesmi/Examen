@@ -31,7 +31,7 @@ class ListCategoriaScreen extends StatelessWidget {
         onPressed: () {
           categoriaService.selectedCategoria =
               CategoriaItem(categoryId: 0, categoryName: '', categoryState: '');
-          Navigator.pushNamed(context, 'edit');
+          Navigator.pushNamed(context, 'editcat');
         },
       ),
     );

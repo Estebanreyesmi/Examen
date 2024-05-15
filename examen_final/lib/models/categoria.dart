@@ -12,8 +12,9 @@ class Categoria {
   String toJson() => json.encode(toMap());
 
   factory Categoria.fromMap(Map<String, dynamic> json) => Categoria(
-        categoriaList: List<CategoriaItem>.from(
-            json["Listado Categorias"].map((x) => CategoriaItem.fromMap(x))),
+        categoriaList: List<CategoriaItem>.from(json["Listado Categorias"].map(
+            (x) => CategoriaItem.fromMap(
+                x))), //me entrampe con esto X(   json["Listado Categorias"]
       );
 
   Map<String, dynamic> toMap() => {

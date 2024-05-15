@@ -25,16 +25,11 @@ class CustomDrawer extends StatelessWidget {
             title: Text('Administrador'),
             children: [
               ListTile(
-                title: Text('Proveedores'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AgregarCategoriaScreen()),
-                  );
-                },
-              ),
+                  title: Text('Proveedores'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, 'prov');
+                  }),
               ListTile(
                   title: Text('Categorias'),
                   onTap: () {
