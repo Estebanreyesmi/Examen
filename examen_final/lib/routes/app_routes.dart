@@ -10,7 +10,7 @@ class AppRoutes {
     'edit': (BuildContext context) => const EditProductScreen(),
     'add_user': (BuildContext context) => const RegisterUserScreen(),
     'home': (BuildContext context) => const HomeScreen(),
-    'cat': (BuildContext context) => const HomeScreen(),
+    'cat': (BuildContext context) => const CategoriaScreen(),
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {

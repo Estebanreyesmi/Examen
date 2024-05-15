@@ -1,5 +1,7 @@
+import 'package:examen_final/models/categoria.dart';
+import 'package:examen_final/services/category_service.dart';
 import 'package:flutter/material.dart';
-import 'package:examen_final/services/category_service.dart'; // Asegúrate de importar el servicio de categorías
+import 'package:provider/provider.dart';
 
 class AgregarCategoriaScreen extends StatefulWidget {
   @override
@@ -8,7 +10,7 @@ class AgregarCategoriaScreen extends StatefulWidget {
 
 class _AgregarCategoriaScreenState extends State<AgregarCategoriaScreen> {
   final TextEditingController _nombreController = TextEditingController();
-  bool _isActive = true; // Estado por defecto activo
+  final TextEditingController _estadoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,41 +19,22 @@ class _AgregarCategoriaScreenState extends State<AgregarCategoriaScreen> {
         title: Text('Agregar Categoría'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: _nombreController,
-              decoration: InputDecoration(
-                labelText: 'Nombre de la categoría',
-              ),
+              decoration: InputDecoration(labelText: 'Nombre de la categoría'),
             ),
-            SwitchListTile(
-              title: Text('Activo'),
-              value: _isActive,
-              onChanged: (value) {
-                setState(() {
-                  _isActive = value;
-                });
-              },
+            TextField(
+              controller: _estadoController,
+              decoration: InputDecoration(labelText: 'Estado de la categoría'),
             ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async {
-                // Crear la categoría utilizando el servicio
-                final newCategory = Listado(
-                  categoryId:
-                      0, // El ID se establecerá automáticamente en el servidor
-                  categoryName: _nombreController.text,
-                  categoryState: _isActive ? 'activo' : 'inactivo',
-                );
-                await CategoryService().createCategory(newCategory);
-
-                // Navegar de regreso a la pantalla anterior
-                Navigator.pop(context);
-              },
-              child: Text('Agregar Categoría'),
+              onPressed: () => _agregarCategoria(context),
+              child: Text('Agregar'),
             ),
           ],
         ),
@@ -59,9 +42,36 @@ class _AgregarCategoriaScreenState extends State<AgregarCategoriaScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _nombreController.dispose();
-    super.dispose();
+  void _agregarCategoria(BuildContext context) {
+    final String nombre = _nombreController.text.trim();
+    final String estado = _estadoController.text.trim();
+
+    if (nombre.isNotEmpty && estado.isNotEmpty) {
+      final CategoriaItem nuevaCategoria = CategoriaItem(
+        categoryId: 0,
+        categoryName: nombre,
+        categoryState: estado,
+      );
+
+      Provider.of<CategoriaService>(context, listen: false)
+          .createCategoria(nuevaCategoria);
+
+      Navigator.of(context)
+          .pop(); // Regresa a la pantalla anterior después de agregar la categoría
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Error'),
+          content: Text('Por favor, completa todos los campos.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Aceptar'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

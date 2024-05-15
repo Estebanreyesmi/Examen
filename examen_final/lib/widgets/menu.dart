@@ -36,16 +36,11 @@ class CustomDrawer extends StatelessWidget {
                 },
               ),
               ListTile(
-                title: Text('Categorias'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ListaCategoriasScreen()),
-                  );
-                },
-              ),
+                  title: Text('Categorias'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, 'cat');
+                  }),
               ListTile(
                 title: Text('Productos'),
                 onTap: () {

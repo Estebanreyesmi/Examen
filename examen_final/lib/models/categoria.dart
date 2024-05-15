@@ -1,28 +1,29 @@
 import 'dart:convert';
 
-class Category {
-  Category({
-    required this.listado,
+class Categoria {
+  Categoria({
+    required this.categoriaList,
   });
 
-  List<Listado> listado;
+  List<CategoriaItem> categoriaList;
 
-  factory Category.fromJson(String str) => Category.fromMap(json.decode(str));
+  factory Categoria.fromJson(String str) => Categoria.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Category.fromMap(Map<String, dynamic> json) => Category(
-        listado:
-            List<Listado>.from(json["Listado"].map((x) => Listado.fromMap(x))),
+  factory Categoria.fromMap(Map<String, dynamic> json) => Categoria(
+        categoriaList: List<CategoriaItem>.from(
+            json["CategoriaList"].map((x) => CategoriaItem.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
-        "Listado": List<dynamic>.from(listado.map((x) => x.toMap())),
+        "CategoriaList":
+            List<dynamic>.from(categoriaList.map((x) => x.toMap())),
       };
 }
 
-class Listado {
-  Listado({
+class CategoriaItem {
+  CategoriaItem({
     required this.categoryId,
     required this.categoryName,
     required this.categoryState,
@@ -32,11 +33,12 @@ class Listado {
   String categoryName;
   String categoryState;
 
-  factory Listado.fromJson(String str) => Listado.fromMap(json.decode(str));
+  factory CategoriaItem.fromJson(String str) =>
+      CategoriaItem.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Listado.fromMap(Map<String, dynamic> json) => Listado(
+  factory CategoriaItem.fromMap(Map<String, dynamic> json) => CategoriaItem(
         categoryId: json["category_id"],
         categoryName: json["category_name"],
         categoryState: json["category_state"],
@@ -48,7 +50,7 @@ class Listado {
         "category_state": categoryState,
       };
 
-  Listado copy() => Listado(
+  CategoriaItem copy() => CategoriaItem(
         categoryId: categoryId,
         categoryName: categoryName,
         categoryState: categoryState,
